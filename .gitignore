@@ -1,0 +1,41 @@
+# Build artifacts
+target/
+*.exe
+*.dll
+*.pdb
+
+# Shader cache
+shader-cache/
+*.bin
+*.cache
+
+# Game files (not tracked)
+game/
+*.exe
+*.pak
+*.dat
+
+# Config with local paths
+config.local.toml
+*.local.toml
+
+# Logs
+*.log
+*.out
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary
+*.tmp
+*.temp
+temp/
+tmp/
