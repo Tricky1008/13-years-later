@@ -1,0 +1,22 @@
+# victory.toml - Configuration for VIctory-NVIDIA (trustno1-coder)
+# COPY THIS FILE TO victory.toml AND EDIT THE PATHS
+# ALL PATHS MUST BE OUTSIDE THE REPO (absolute paths recommended)
+
+# ============================================================================
+# REQUIRED: Game directory containing the Xbox dump
+# ============================================================================
+
+[paths]
+# Your own dump of the title.     env: VICTORY_GAME_DIR
+game_dir = 'E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK'
+
+# Derived data. Default: %LOCALAPPDATA%\victory\cache.   env: VICTORY_CACHE_DIR
+cache_dir = 'E:\GTA6-Cache'
+
+# What titles save (persistent local storage), kept apart from the cache.
+# Default: %LOCALAPPDATA%\victory\data.   env: VICTORY_DATA_DIR
+data_dir = 'E:\GTA6-Data'
+
+# Other Xbox Series titles used to test platform-level code.
+# env: VICTORY_TEST_TITLES (separated by ';')
+test_titles = []

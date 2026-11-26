@@ -1,0 +1,52 @@
+# victory.toml - Configuration for VIctory-NVIDIA (trustno1-coder)
+# COPY THIS FILE TO victory.toml AND EDIT THE PATHS
+# ALL PATHS MUST BE OUTSIDE THE REPO (absolute paths recommended)
+
+# ============================================================================
+# REQUIRED: Game directory containing the Xbox dump
+# ============================================================================
+game_dir = "D:\Games\GTA6_Dump"  # CHANGE THIS - folder with title.exe
+
+# ============================================================================
+# REQUIRED: Shader archives (.rpf files from the game)
+# ============================================================================
+shader_archives = [
+    "D:\Games\GTA6_Dump\shaders.rpf",  # CHANGE THIS
+]
+
+# ============================================================================
+# REQUIRED: Data directory (saves, settings, crashes.log)
+# ============================================================================
+data_dir = "D:\Games\GTA6_Data"  # CHANGE THIS - will be created
+
+# ============================================================================
+# REQUIRED: Cache directory (shader cache, pipeline cache)
+# ============================================================================
+cache_dir = "D:\Games\GTA6_Cache"  # CHANGE THIS - will be created
+
+# ============================================================================
+# OPTIONAL: Additional settings
+# ============================================================================
+# Log level: trace, debug, info, warn, error
+# log_level = "info"
+
+# Adapter selection (partial name or #index)
+# adapter = "5060"
+
+# ============================================================================
+# SERIES S HALF-SCALE OPTIMIZATIONS (set via environment in play-nvidia.ps1)
+# ============================================================================
+# VICTORY_TEXTURE_DROP_MIPS=2        # Drop highest mip for 8GB VRAM
+# VICTORY_RENDER_SCALE=0.5           # Half render scale (960x540 world)
+# VICTORY_OWN_UPSCALER=1             # Use game's temporal upscaler
+# VICTORY_BVH_MISS=1                 # Skip ray-tracing BVH walks
+# VICTORY_CARD_BUFFERS_MIN_MB=1      # Move memory compares to GPU
+# VICTORY_CARD_BUFFERS_MB=1536       # Buffer threshold for GPU compares
+# VICTORY_PIPELINE_WAIT_MS=10000     # Wait for pipeline compilation
+# VICTORY_DYNAMIC_SLOTS=524288       # Fix NVIDIA descriptor heap cap
+# VICTORY_COMPOSE=1                  # Series S interface plane (4K menus)
+# VICTORY_NO_WATCHDOG=1              # Disable title's frame watchdog
+# VICTORY_AMBIENT_AIR=1.5            # Fix sky light in fog
+# VICTORY_AMBIENT_MOST=2             # Cap ambient light multiplier
+# VICTORY_NAN_SCRUB=1                # Fix NaN in shaders
+# VICTORY_PIPELINE_WAIT_ONCE=1       # Wait for each pipeline once
