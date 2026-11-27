@@ -29,13 +29,11 @@ This project implements a native translation layer that executes the console exe
 
 ## Supported Hardware
 
-| GPU | VRAM | Profile | Typical FPS |
-|-----|------|---------|-------------|
-| RTX 5070 / 5060 Ti | 12 / 8 GB | Smaller console (half-scale) | 20–22 |
-| RTX 4070 / 4060 | 12 / 8 GB | Smaller console (half-scale) | 15–18 |
-| RX 7900 XTX | 24 GB | Larger console | 19–22 |
+| GPU | VRAM | Profile | Achieved FPS |
+|-----|------|---------|--------------|
+| RTX 5060 | 8 GB | Series S half-scale (540p) | 7–10 |
 
-> **Note**: "Smaller console profile" = Series S equivalent render target; "Larger console profile" = Series X equivalent.
+> **Note**: "Series S half-scale" = 960×540 rendered → upscaled to 1080p via game's temporal upscaler.
 
 ### Tested Configuration (Author's Hardware)
 
