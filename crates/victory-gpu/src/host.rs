@@ -54,6 +54,8 @@ pub(crate) struct Host {
     messages: Option<ID3D12InfoQueue>,
     next_rtv: AtomicU32,
     presenter: Mutex<Option<Presenter>>,
+    /// FSR 2 upscaling context (initialized on first present if enabled).
+    fsr: Mutex<Option<crate::fsr::FsrContext>>,
     /// The adapter the device is on, for its memory budget
     /// ([`Host::video_memory`]); `None` if the system does not name it.
     adapter: Option<IDXGIAdapter3>,
@@ -969,6 +971,7 @@ fn create() -> windows::core::Result<Host> {
             messages,
             next_rtv: AtomicU32::new(0),
             presenter: Mutex::new(None),
+            fsr: Mutex::new(None),
             adapter,
         })
     }
@@ -8883,7 +8886,30 @@ impl Host {
             };
         }
         let p = presenter.as_mut()?;
-        if (p.width, p.height, p.format) != (width, height, format) {
+        
+        // Check if FSR is enabled and initialized
+        let fsr_enabled = self.fsr.lock().unwrap_or_else(|e| e.into_inner()).is_some();
+        
+        // If FSR is enabled, the presenter was created at display resolution
+        // The texture should be at render resolution (but currently the title renders at native resolution)
+        // We'll check if the texture matches the expected render resolution from FSR context
+        let (fsr_render_width, fsr_render_height, fsr_display_width, fsr_display_height) = {
+            let fsr_lock = self.fsr.lock().unwrap_or_else(|e| e.into_inner());
+            if let Some(fsr) = fsr_lock.as_ref() {
+                (fsr.render_width, fsr.render_height, fsr.display_width, fsr.display_height)
+            } else {
+                (0, 0, 0, 0)
+            }
+        };
+        
+        let use_fsr = fsr_enabled 
+            && fsr_render_width > 0 
+            && width == fsr_render_width 
+            && height == fsr_render_height
+            && p.width == fsr_display_width 
+            && p.height == fsr_display_height;
+
+        if (p.width, p.height, p.format) != (width, height, format) && !use_fsr {
             // Presents sent ahead hold back buffers until they have run.
             settle_now(WHY_SYNC);
             // SAFETY: no back buffer is held; every submission was waited for.
@@ -8940,21 +8966,46 @@ impl Host {
             };
             copy.reset();
             let list = &copy.list;
-            list.ResourceBarrier(&[
-                transition(texture, state, D3D12_RESOURCE_STATE_COPY_SOURCE),
-                transition(
-                    &back,
-                    D3D12_RESOURCE_STATE_PRESENT,
-                    D3D12_RESOURCE_STATE_COPY_DEST,
-                ),
-            ]);
-            // LOCAL (port of fxceless #1189): the second plane laid over the
-            // first, into a texture of ours shown instead (`crate::compose`).
-            let laid = over.and_then(|(ui, ui_state)| crate::compose::record(&self.device, list, texture, ui, ui_state));
-            if let Some(laid) = &laid {
-                copy.keep(laid);
+
+            if use_fsr {
+                // FSR 2 upscale path
+                // We need depth and motion vectors - for now we'll log a warning
+                // and fall back to direct copy since we don't have access to those
+                tracing::warn!("FSR 2 upscale requested but depth/motion vectors not available; falling back to direct copy");
+                list.ResourceBarrier(&[
+                    transition(texture, state, D3D12_RESOURCE_STATE_COPY_SOURCE),
+                    transition(
+                        &back,
+                        D3D12_RESOURCE_STATE_PRESENT,
+                        D3D12_RESOURCE_STATE_COPY_DEST,
+                    ),
+                ]);
+                // LOCAL (port of fxceless #1189): the second plane laid over the
+                // first, into a texture of ours shown instead (`crate::compose`).
+                let laid = over.and_then(|(ui, ui_state)| crate::compose::record(&self.device, list, texture, ui, ui_state));
+                if let Some(laid) = &laid {
+                    copy.keep(laid);
+                }
+                list.CopyResource(&back, laid.as_ref().unwrap_or(texture));
+            } else {
+                // Standard direct copy path
+                list.ResourceBarrier(&[
+                    transition(texture, state, D3D12_RESOURCE_STATE_COPY_SOURCE),
+                    transition(
+                        &back,
+                        D3D12_RESOURCE_STATE_PRESENT,
+                        D3D12_RESOURCE_STATE_COPY_DEST,
+                    ),
+                ]);
+                // LOCAL (port of fxceless #1189): the second plane laid over the
+                // first, into a texture of ours shown instead (`crate::compose`).
+                let laid = over.and_then(|(ui, ui_state)| crate::compose::record(&self.device, list, texture, ui, ui_state));
+                if let Some(laid) = &laid {
+                    copy.keep(laid);
+                }
+                list.CopyResource(&back, laid.as_ref().unwrap_or(texture));
             }
-            list.CopyResource(&back, laid.as_ref().unwrap_or(texture));
+
             #[cfg(feature = "diagnostics")]
             let capture = crate::capture::wanted(frame)
                 .then(|| crate::capture::read_back(&self.device, list, texture))
@@ -9024,12 +9075,27 @@ impl Host {
             None => window(width, height)?,
         };
         self.log_video_memory("right before the swap chain is made");
+
+        // Check if FSR is enabled via environment variable
+        let render_scale = std::env::var("VICTORY_RENDER_SCALE")
+            .ok()
+            .and_then(|v| v.parse::<f32>().ok())
+            .filter(|&s| s > 0.0 && s <= 1.0);
+
+        // If FSR enabled, calculate render resolution and create swap chain at display resolution
+        let (display_width, display_height) = (width, height);
+        let (render_width, render_height) = if let Some(scale) = render_scale {
+            ((width as f32 * scale) as u32, (height as f32 * scale) as u32)
+        } else {
+            (width, height)
+        };
+
         // SAFETY: plain object creation for our window.
         unsafe {
             let factory: IDXGIFactory2 = CreateDXGIFactory2(DXGI_CREATE_FACTORY_FLAGS(0))?;
             let desc = DXGI_SWAP_CHAIN_DESC1 {
-                Width: width,
-                Height: height,
+                Width: display_width,
+                Height: display_height,
                 Format: format,
                 SampleDesc: DXGI_SAMPLE_DESC {
                     Count: 1,
@@ -9047,10 +9113,37 @@ impl Host {
             copy.close();
             tracing::info!(width, height, format = format.0, "presenting to a window");
             self.log_video_memory("right after the swap chain is made");
+
+            // Initialize FSR if render scale is set (render resolution != display resolution)
+            if let Some(scale) = render_scale {
+                if scale < 1.0 {
+                    let mut fsr_lock = self.fsr.lock().unwrap_or_else(|e| e.into_inner());
+                    if fsr_lock.is_none() {
+                        let mut fsr_ctx = crate::fsr::FsrContext::new(
+                            &self.device,
+                            &self.queue,
+                            render_width,
+                            render_height,
+                            display_width,
+                            display_height,
+                        );
+                        // Need mutable device for FSR initialization
+                        let mut device_mut = self.device.clone();
+                        if fsr_ctx.initialize(&mut device_mut) {
+                            *fsr_lock = Some(fsr_ctx);
+                            tracing::info!("FSR 2 initialized: {}x{} -> {}x{} (scale: {})",
+                                render_width, render_height, display_width, display_height, scale);
+                        } else {
+                            tracing::warn!("FSR 2 initialization failed (ffx-fsr2.dll not found?)");
+                        }
+                    }
+                }
+            }
+
             Ok(Presenter {
                 swap_chain,
-                width,
-                height,
+                width: display_width,
+                height: display_height,
                 format,
                 copy,
                 ahead: Vec::new(),

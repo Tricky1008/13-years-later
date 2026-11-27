@@ -19,6 +19,8 @@
 mod ambient;
 #[cfg(all(windows, feature = "diagnostics"))]
 mod capture;
+#[cfg(windows)]
+mod fsr;
 pub mod console;
 // LOCAL (port of fxceless #1189): Series S interface plane laid over the game (VICTORY_COMPOSE=1).
 #[cfg(windows)]

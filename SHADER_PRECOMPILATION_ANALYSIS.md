@@ -86,7 +86,7 @@ This is the **critical missing step**. Without running `victory.exe warm --used 
 
 ### Required Action:
 ```powershell
-& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "BuildConfig\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 Expected time: 30-60 minutes depending on GPU
@@ -129,26 +129,26 @@ RESULT: PASS - Zero on-the-fly compilation
 ```powershell
 # From VIctory-NVIDIA directory
 $env:VICTORY_CACHE_DIR = "C:\Games\GTA6-Cache"
-$env:VICTORY_CONFIG = "GTA6-Build\VIctory-NVIDIA\victory.toml"
+$env:VICTORY_CONFIG = "BuildConfig\VIctory-NVIDIA\victory.toml"
 $env:VICTORY_GAME_DIR = "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
-$env:VICTORY_DATA_DIR = "GTA6-Build\VIctory-NVIDIA\data"
+$env:VICTORY_DATA_DIR = "BuildConfig\VIctory-NVIDIA\data"
 $env:VICTORY_HOST_WAVE = "64"
 $env:VICTORY_VIEW_LIMIT = "1000000"
 
-& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "BuildConfig\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 ### 2. Verify After Phase 3
 ```powershell
 # Quick verification run
-& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" run "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK\GTA6.exe" --execute --console series-x
+& "BuildConfig\VIctory-NVIDIA\target\diag\victory.exe" run "C:\Games\Xbox.Xbox.v1.0.2.1-CYBERLEEK\title.exe" --execute --console series-x
 # Check logs for "shader translated" or "host pipeline" entries
 ```
 
 ### 3. For Future Driver/Translator Updates
 Re-run only Phase 3 (warm) since shader cache and pipeline book are stable:
 ```powershell
-& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "BuildConfig\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 ---
@@ -156,7 +156,7 @@ Re-run only Phase 3 (warm) since shader cache and pipeline book are stable:
 ## Complete Workflow Script
 
 The comprehensive script `precompile-shaders-complete.ps1` has been created at:
-`GTA6-Build\VIctory-NVIDIA\precompile-shaders-complete.ps1`
+`BuildConfig\VIctory-NVIDIA\precompile-shaders-complete.ps1`
 
 Run it with:
 ```powershell

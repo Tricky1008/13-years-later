@@ -44,7 +44,9 @@ tempfile = "3.27.0"
 # Opus decoding for the console's audio decoder (BSD-3-Clause, pure Rust).
 opus-pure = "0.2.4"
 # AMD FidelityFX Super Resolution 2 (FSR 2) integration.
-fsr = { version = "0.4", features = ["d3d12"] }
+fsr = { version = "0.1.11", features = ["d3d12"] }
+fsr-sys = "0.1.11"
+widestring = "1.2"
 
 [workspace.lints.rust]
 unsafe_op_in_unsafe_fn = "deny"

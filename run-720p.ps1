@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$VictoryDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA"
+$VictoryDir = "$PSScriptRoot\BuildConfig\VIctory-NVIDIA"
 $Build = "diag"
 
 $victoryExe = Join-Path $VictoryDir "target\$Build\victory.exe"

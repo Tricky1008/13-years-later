@@ -50,7 +50,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$GameDir,
 
-    [string]$VictoryDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA",
+    [string]$VictoryDir = "$PSScriptRoot\BuildConfig\VIctory-NVIDIA",
     [string]$CacheDir = "$PSScriptRoot\GTA6-Cache",
     [int]$Jobs = 16,
     [switch]$SkipGameplay,
