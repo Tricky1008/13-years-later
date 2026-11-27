@@ -1,7 +1,7 @@
 # VIctory-NVIDIA Shader Pre-Compilation Analysis Report
 
 **Generated:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-**Game:** GTA 6 (Xbox dump: `C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK`)
+**Game:** Xbox Series X|S Title (Xbox dump: `C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK`)
 **Cache Directory:** `C:\Games\GTA6-Cache`
 
 ---
