@@ -37,6 +37,25 @@ This project implements a native translation layer that executes the console exe
 
 > **Note**: "Smaller console profile" = Series S equivalent render target; "Larger console profile" = Series X equivalent.
 
+### Tested Configuration (Author's Hardware)
+
+| Component | Specification |
+|-----------|---------------|
+| **CPU** | Intel Core Ultra 7 265K (Arrow Lake, AVX2+) |
+| **RAM** | 32 GB DDR5 |
+| **GPU** | NVIDIA RTX 5060 8 GB (Wave32, SM 6.6, Mesh Shaders) |
+| **OS** | Windows 11 |
+
+**Achieved Performance:**
+
+| Build | Mode | Achieved FPS | Notes |
+|-------|------|--------------|-------|
+| VIctory-NVIDIA | Series S 540p (half-scale) | **7–10 FPS** | Lower than expected 18–22 FPS; may need driver/optimization tuning |
+| VIctory-NVIDIA | Series S 540p + Smooth Motion | ~14–20 FPS (2× perceived) | NVIDIA App Smooth Motion enabled |
+| victory-nvidia-8gb | Series X 1080p | 6–10 FPS | Full visual quality, Wave32 optimized |
+
+> **Note**: Series S half-scale mode runs at 960×540 rendered → upscaled to 1080p via game's temporal upscaler. The 7–10 FPS on RTX 5060 8GB suggests VRAM pressure or driver overhead; `VICTORY_TEXTURE_DROP_MIPS=2` and `VICTORY_RENDER_SCALE=0.5` are critical.
+
 ## Building
 
 ```bash
