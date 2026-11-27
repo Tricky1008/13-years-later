@@ -41,7 +41,7 @@ You need the **Xbox Series X|S dump** (unpacked game files):
 
 ### For victory-nvidia-8gb (BEST for 8GB VRAM):
 ```powershell
-cd "E:\GTA 6\GTA6-Build\victory-nvidia-8gb"
+cd "GTA6-Build\victory-nvidia-8gb"
 copy victory.toml.template victory.toml
 notepad victory.toml
 ```
@@ -56,7 +56,7 @@ cache_dir = "D:\Your\Cache\Path"          # Will be created
 
 ### For VIctory-NVIDIA (Series S Half-Scale - Higher FPS):
 ```powershell
-cd "E:\GTA 6\GTA6-Build\VIctory-NVIDIA"
+cd "GTA6-Build\VIctory-NVIDIA"
 copy victory.toml.template victory.toml
 notepad victory.toml
 ```
@@ -67,7 +67,7 @@ notepad victory.toml
 
 ### Option A: victory-nvidia-8gb (Recommended for 8GB VRAM)
 ```powershell
-cd "E:\GTA 6\GTA6-Build\victory-nvidia-8gb"
+cd "GTA6-Build\victory-nvidia-8gb"
 cargo build --release --bin victory
 # Takes 5-15 minutes
 # Output: target\release\victory.exe
@@ -75,7 +75,7 @@ cargo build --release --bin victory
 
 ### Option B: VIctory-NVIDIA (Series S Half-Scale ~18-22 FPS)
 ```powershell
-cd "E:\GTA 6\GTA6-Build\VIctory-NVIDIA"
+cd "GTA6-Build\VIctory-NVIDIA"
 cargo build --locked --profile diag -p victory --features diagnostics
 # Takes 10-20 minutes
 # Output: target\diag\victory.exe
@@ -101,7 +101,7 @@ cargo build --locked --profile diag -p victory --features diagnostics
 
 ### victory-nvidia-8gb (Native ~6-10 FPS, Full Series X Visuals)
 ```powershell
-cd "E:\GTA 6\GTA6-Build\victory-nvidia-8gb"
+cd "GTA6-Build\victory-nvidia-8gb"
 .\scripts\play-nvidia-8gb.ps1 -Exe "D:\Your\Game\Dump\title.exe"
 ```
 **Settings auto-applied:**
@@ -115,7 +115,7 @@ cd "E:\GTA 6\GTA6-Build\victory-nvidia-8gb"
 
 ### VIctory-NVIDIA (Series S Half-Scale ~18-22 FPS Native)
 ```powershell
-cd "E:\GTA 6\GTA6-Build\VIctory-NVIDIA"
+cd "GTA6-Build\VIctory-NVIDIA"
 .\scripts\play-nvidia.ps1 -Exe "D:\Your\Game\Dump\title.exe"
 ```
 **Settings auto-applied:**

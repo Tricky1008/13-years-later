@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$VictoryDir = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA"
+$VictoryDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA"
 $Build = "diag"
 
 $victoryExe = Join-Path $VictoryDir "target\$Build\victory.exe"
@@ -77,5 +77,5 @@ Write-Host "Series S, rendering at 720p (render scale 0.667)" -ForegroundColor G
 $Exe = (Resolve-Path $Exe).Path
 $runArgs = @('run', $Exe, '--execute', '--console', 'series-s')
 
-Push-Location "E:\GTA 6\GTA6-Build\VIctory-NVIDIA"
+Push-Location $VictoryDir
 try { & $victoryExe @runArgs } finally { Pop-Location }

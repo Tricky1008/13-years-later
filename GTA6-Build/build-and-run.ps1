@@ -43,7 +43,7 @@ param(
 # CONFIGURATION
 # ============================================================================
 $ErrorActionPreference = "Stop"
-$BASE_DIR = "E:\GTA 6\GTA6-Build"
+$BASE_DIR = "$PSScriptRoot"
 $GAME_EXE = Resolve-Path $GameExePath
 
 Write-Host "===========================================" -ForegroundColor Cyan

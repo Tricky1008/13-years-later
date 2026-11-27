@@ -40,18 +40,18 @@
     Only run Phase 4 (verification) against current cache.
 
 .EXAMPLE
-    .\precompile-shaders-complete.ps1 -GameDir "E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
+    .\precompile-shaders-complete.ps1 -GameDir "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
 
 .EXAMPLE
-    .\precompile-shaders-complete.ps1 -GameDir "E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK" -Jobs 16 -VerifyOnly
+    .\precompile-shaders-complete.ps1 -GameDir "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK" -Jobs 16 -VerifyOnly
 #>
 
 param(
     [Parameter(Mandatory=$true)]
     [string]$GameDir,
 
-    [string]$VictoryDir = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA",
-    [string]$CacheDir = "E:\GTA6-Cache",
+    [string]$VictoryDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA",
+    [string]$CacheDir = "$PSScriptRoot\GTA6-Cache",
     [int]$Jobs = 16,
     [switch]$SkipGameplay,
     [switch]$VerifyOnly

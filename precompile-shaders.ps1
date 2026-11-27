@@ -17,8 +17,8 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$GameDir,
     
-    [string]$VictoryDir = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA",
-    [string]$CacheDir = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\cache",
+    [string]$VictoryDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA",
+    [string]$CacheDir = "$PSScriptRoot\GTA6-Build\VIctory-NVIDIA\cache",
     [int]$Jobs = 16
 )
 

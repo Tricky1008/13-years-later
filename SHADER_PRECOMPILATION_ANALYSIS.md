@@ -1,8 +1,8 @@
 # VIctory-NVIDIA Shader Pre-Compilation Analysis Report
 
 **Generated:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-**Game:** GTA 6 (Xbox dump: `E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK`)
-**Cache Directory:** `E:\GTA6-Cache`
+**Game:** GTA 6 (Xbox dump: `C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK`)
+**Cache Directory:** `C:\Games\GTA6-Cache`
 
 ---
 
@@ -56,7 +56,7 @@ DXIL         14,259 emitted of 14,259 vertex and pixel programs; 0 validated, 0 
 **Status:** ✅ **COMPLETED**
 
 ```
-Pipeline book: E:\GTA6-Cache\pipelines\early-pipelines.txt
+Pipeline book: C:\Games\GTA6-Cache\pipelines\early-pipelines.txt
 Recorded pipelines: 3,045
 Slow pipelines: 566 (logged in slow-pipelines.txt)
 ```
@@ -86,7 +86,7 @@ This is the **critical missing step**. Without running `victory.exe warm --used 
 
 ### Required Action:
 ```powershell
-& "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 Expected time: 30-60 minutes depending on GPU
@@ -128,27 +128,27 @@ RESULT: PASS - Zero on-the-fly compilation
 ### 1. Immediate: Run Phase 3 (CRITICAL)
 ```powershell
 # From VIctory-NVIDIA directory
-$env:VICTORY_CACHE_DIR = "E:\GTA6-Cache"
-$env:VICTORY_CONFIG = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\victory.toml"
-$env:VICTORY_GAME_DIR = "E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
-$env:VICTORY_DATA_DIR = "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\data"
+$env:VICTORY_CACHE_DIR = "C:\Games\GTA6-Cache"
+$env:VICTORY_CONFIG = "GTA6-Build\VIctory-NVIDIA\victory.toml"
+$env:VICTORY_GAME_DIR = "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
+$env:VICTORY_DATA_DIR = "GTA6-Build\VIctory-NVIDIA\data"
 $env:VICTORY_HOST_WAVE = "64"
 $env:VICTORY_VIEW_LIMIT = "1000000"
 
-& "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 ### 2. Verify After Phase 3
 ```powershell
 # Quick verification run
-& "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" run "E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK\GTA6.exe" --execute --console series-x
+& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" run "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK\GTA6.exe" --execute --console series-x
 # Check logs for "shader translated" or "host pipeline" entries
 ```
 
 ### 3. For Future Driver/Translator Updates
 Re-run only Phase 3 (warm) since shader cache and pipeline book are stable:
 ```powershell
-& "E:\GTA 6\GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
+& "GTA6-Build\VIctory-NVIDIA\target\diag\victory.exe" warm --used --jobs 12
 ```
 
 ---
@@ -156,11 +156,11 @@ Re-run only Phase 3 (warm) since shader cache and pipeline book are stable:
 ## Complete Workflow Script
 
 The comprehensive script `precompile-shaders-complete.ps1` has been created at:
-`E:\GTA 6\GTA6-Build\VIctory-NVIDIA\precompile-shaders-complete.ps1`
+`GTA6-Build\VIctory-NVIDIA\precompile-shaders-complete.ps1`
 
 Run it with:
 ```powershell
-.\precompile-shaders-complete.ps1 -GameDir "E:\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
+.\precompile-shaders-complete.ps1 -GameDir "C:\Games\GTA6.Xbox.v1.0.2.1-CYBERLEEK"
 ```
 
 Options:
